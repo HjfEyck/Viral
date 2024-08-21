@@ -1,0 +1,23 @@
+# Set reference genome file path
+REF=/srv/scratch/z5228384/AAshe/ElegansRefGenome/c_elegans.PRJNA13758.WS283.genomic.fa
+
+# Loop over all files ending with '_R1.fastq.gz'
+for f1 in *_R1.fastq.gz
+do
+    # Derive the corresponding '_R2' file name from '_R1' file name
+    f2=${f1%%_R1.fastq.gz}"_R2.fastq.gz"
+    
+    # Align reads to the reference genome using BWA-MEM, then pipe output to samtools to:
+    # - Filter unmapped reads (-f 4)
+    # - Convert to BAM format (-b)
+    # - Sort the BAM file
+    bwa mem -t 16 $REF $f1 $f2 | samtools view -@ 16 -f 4 -b - | samtools sort -@ 16 -o ${f1%%_R1.fastq.gz}"_sorted_unmapped.bam" -
+    
+    # Convert sorted unmapped BAM file back to FASTQ format
+    # - Extract R1 reads to *_unmapped_R1.fastq
+    # - Extract R2 reads to *_unmapped_R2.fastq
+    samtools fastq -1 ${f1%%_R1.fastq.gz}_unmapped_R1.fastq -2 ${f1%%_R1.fastq.gz}_unmapped_R2.fastq ${f1%%_R1.fastq.gz}_sorted_unmapped.bam
+done
+
+# Change directory to the specified path
+cd /srv/scratch/z5228384/AAshe/raw_data/trimmed/viralbam/hostremoved
