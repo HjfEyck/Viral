@@ -1,0 +1,10 @@
+First, execute VirSorter2 which will prepare the necessary files to improve our viral annotation using DRAM-v.
+
+virsorter run --seqname-suffix-off --viral-gene-enrich-off --provirus-off --prep-for-dramv -i extracted_sequences_filtered.fna -w vs2_8th --include-groups dsDNAphage,ssDNA --min-length 5000 --min-score 0.5 -j 8 all
+Next we use Dramv to annotate. DRAM-v annotates viral genomes by calling genes within the viral sequences and comparing them against various functional databases to predict their functions.
+
+The first command runs DRAM-v to annotate viral genomes based on the input sequences and contig affiliations. The second command distills these annotations into a summarized format, providing an overview of the functional annotations.
+
+DRAM-v.py annotate -i final-viral-combined-for-dramv.fa -v viral-affi-contigs-for-dramv.tab -o dramv-annotate --skip_trnascan --threads 16 --min_contig_size 1000
+#step 2 summarize anntotations
+DRAM-v.py distill -i dramv-annotate/annotations.tsv -o dramv-distill
