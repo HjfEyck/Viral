@@ -1,0 +1,32 @@
+# Activate the Conda environment named 'megahit_env'
+conda activate megahit_env
+
+# Run MEGAHIT for each pair of FASTQ files
+for f1 in *_R1.fastq.gz
+do
+    # Derive the corresponding '_R2' file name from '_R1' file name
+    f2=${f1%%_R1.fastq.gz}"_R2.fastq.gz"
+    
+    # Run MEGAHIT with the specified parameters:
+    # - Input paired-end reads (-1 for R1 and -2 for R2)
+    # - Output directory named after the R1 file prefix with '_megahit_hostremoved' suffix
+    # - Memory usage set to 0.9 times the available memory (-m 0.9)
+    # - Use 28 threads (-t 28)
+    megahit -1 $f1 -2 $f2 -o ${f1%%_R1.fastq.gz}"_megahit_hostremoved" -m 0.9 -t 28
+done
+
+# Set the source and destination directories for MEGAHIT assemblies
+source_directory=/srv/scratch/z5228384/AAshe/ViralSearch/Genomad_analysis/ViralAssemblyHostRetained/proviruses
+destination_directory=/srv/scratch/z5228384/AAshe/ViralSearch/Genomad_analysis/ViralAssemblyHostRetained/proviruses/fna
+
+# Loop through each subdirectory in the source directory
+for subdirectory in "$source_directory"/*; do
+  # Check if the subdirectory contains the file "scaffolds.fasta"
+  if [ -f "$subdirectory/scaffolds.fasta" ]; then
+    # Extract the subdirectory name
+    subdirectory_name=$(basename "$subdirectory")
+    
+    # Copy and rename the file to the destination directory
+    cp "$subdirectory/scaffolds.fasta" "$destination_directory/$subdirectory_name.fasta"
+  fi
+done
