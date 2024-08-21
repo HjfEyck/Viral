@@ -1,0 +1,16 @@
+GeNomad is a tool for the identification, annotation, and analysis of mobile genetic elements within genomic data. It integrates multiple databases and algorithms to provide annotations.
+
+# Set the GENOMAD database directory
+GENOMAD=/mnt/d/genomad/genomad_db
+
+# Run GENOMAD on all .fasta files with 'hostretained' in their name
+for file in *hostretained.fasta
+do
+    # Run GENOMAD end-to-end mode with the specified parameters:
+    # - Cleanup temporary files after completion (--cleanup)
+    # - Use 6 threads (--threads 6)
+    # - Input file ($file)
+    # - Output directory named after the input file prefix with '_genomad_conservative_hostretained_output' suffix
+    # - GENOMAD database directory ($GENOMAD)
+    genomad end-to-end --cleanup --threads 6 $file ${file%%.fasta}"_genomad_conservative_hostretained_output" $GENOMAD 
+done
