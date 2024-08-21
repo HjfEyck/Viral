@@ -1,0 +1,13 @@
+CheckV is a tool for working with viral genomes, particularly those derived from metagenomic data. It assesses the integrity and quality of viral genome assemblies by providing assessments of completeness and contamination.
+
+CHV=/mnt/d/AAshe/ViralData/checkv-db-v1.5
+
+# Run CheckV on all .fna files
+for file in *.fna
+do
+    # Run CheckV end_to_end mode with the specified parameters:
+    # - Input file ($file)
+    # - Output directory named after the input file prefix with '_output' suffix
+    # - Database directory (-d checkv-db-v1.5/)
+    checkv end_to_end $file ${file%%.fna}"_output" -d checkv-db-v1.5/
+done
