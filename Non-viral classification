@@ -1,7 +1,7 @@
 # Classify sequences with Kraken2
 for file in *.fasta
 do
-kraken2 --db /apps/kraken2/db --output ${file%%.fasta}"_output.txt" --report ${file%%.fasta}"_report.txt" $file
+kraken2 --db /apps/kraken2/db --output ${file%%.fasta}"_output.txt" --report ${file%%.fasta}"_report.txt" $file --threads 16
 done
 
 # Refine classification with Bracken
