@@ -1,0 +1,34 @@
+library(ggplot2)
+library(ggrepel)
+library(scales)
+library(dplyr)
+library(RColorBrewer)
+
+taxonomy_data <- read.csv("D:/AAshe/ViralData/Hostremoved/loose/summary/all.csv", header = TRUE)
+
+# View the first few rows of the data to confirm it's loaded correctly
+head(taxonomy_data)
+
+# Assuming 'taxonomy_data' is already loaded with the correct data
+class_summary <- taxonomy_data %>%
+  group_by(class) %>%
+  summarise(Count = n()) %>%
+  mutate(Proportion = Count / sum(Count))
+
+# Create the plot
+ggplot(class_summary, aes(x = "", y = Proportion, fill = class)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y") +
+  scale_fill_brewer(palette = "Paired", na.value = "white") + # Use Paired color palette
+  theme_void() +
+  theme(legend.position = "none", # This line removes the legend
+        plot.title = element_text(size = 20, face = "bold", hjust = 0.5)) +
+  labs(title = "Virus Taxonomic Composition") +
+  geom_label_repel(aes(label = paste0(scales::percent(Proportion, accuracy = 0.1), "\n", class)),
+                   size = 3.5, # Adjust this value to make the text fit better
+                   box.padding = 0.3,
+                   point.padding = 0.3,
+                   segment.color = 'grey50',
+                   max.overlaps = Inf, # Allow infinite overlaps
+                   force = 1, # Adjust the force to spread out labels
+                   nudge_y = 0.05) # Slightly nudge the labels to avoid overlap
