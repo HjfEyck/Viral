@@ -30,4 +30,4 @@ done
 
 mafft --auto Nematocida_sequences.fasta > aligned_nematocida.fasta
 trimal -in aligned_nematocida.fasta -out trimmed_alignment.fasta -automated1
-iqtree2 -s COX1_macse2_noFS_NT_trimal50_manual.fasta -T 8 -m MFP -B 10000 -bi 1000 -minsup .95 -nm 3500 -alrt 10000 --prefix COX1_macse2_nofs_NT_trimal50_BI1000_shalrt_10000_mfp
+iqtree2 -s trimmed_alignment.fasta -T 8 -m MFP -B 10000 -bi 1000 -minsup .95 -nm 3500 --prefix btub_NT_trimal_BI1000_10000_mfp
