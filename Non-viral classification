@@ -9,3 +9,17 @@ for file in *_report.txt
 do
 bracken -d /apps/kraken2/db -i $file -o ${file%%_report.txt}"_bracken_output.txt" -r 100
 done
+
+
+# We then extracted and annotated the sequences identified as nematocida by bracken
+
+# Loop over all fasta files
+for file in *.fasta; do
+    # Extract the base name of the file (without the extension)
+    base_name=$(basename "$file" .fa)
+    
+    # Run DRAM.py annotate on each file
+    DRAM.py annotate -i "$file" -o "${base_name}_dram-annotate" --threads 16 --min_contig_size 1000
+done
+
+# Then extracted the beta-tubulin genes as barcodes to run as a phylogeny to see how they relate to global nematocida
