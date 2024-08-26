@@ -23,3 +23,10 @@ for file in *.fasta; do
 done
 
 # Then extracted the beta-tubulin genes as barcodes to run as a phylogeny to see how they relate to global nematocida
+
+
+#mafft/7.490
+#trimal/1.4.1r22
+
+mafft --auto Nematocida_sequences.fasta > aligned_nematocida.fasta
+trimal -in aligned_nematocida.fasta -out trimmed_alignment.fasta -automated1
