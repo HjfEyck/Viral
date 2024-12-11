@@ -14,3 +14,8 @@ do
     # - GENOMAD database directory ($GENOMAD)
     genomad end-to-end --cleanup --threads 6 $file ${file%%.fasta}"_genomad_conservative_hostretained_output" $GENOMAD 
 done
+
+
+#save list of ids to ids.txt
+
+seqtk subseq all_proteins.faa ids.txt > extracted_sequences.fasta
